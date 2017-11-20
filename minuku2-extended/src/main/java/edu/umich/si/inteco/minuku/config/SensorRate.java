@@ -13,6 +13,8 @@ public class SensorRate {
     private int SENSOR_RATE_1Hz = 1000000;
     private int SENSOR_RATE_FAST = 12500; //80Hz
 
+    public static int SENSOR_RATE_CUSTOM = 20000; //50Hz
+
     public int get_SENSOR_RATE_NORMAL(){
         return this.SENSOR_RATE_NORMAL;
     }
