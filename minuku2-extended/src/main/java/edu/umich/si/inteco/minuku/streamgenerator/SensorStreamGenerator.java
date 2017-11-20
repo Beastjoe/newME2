@@ -107,7 +107,7 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
         //sensorManager = (SensorManager) mInstance.getSystemService(Context.SENSOR_SERVICE);
         sensorManager = (SensorManager) mApplicationContext.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, mAccelerometer, new SensorRate().get_SENSOR_RATE_10Hz());
+        sensorManager.registerListener(this, mAccelerometer, new SensorRate().get_SENSOR_RATE_1Hz());
         this.mStream = new SensorStream(Constants.SENSOR_QUEUE_SIZE);
         this.mDAO = MinukuDAOManager.getInstance().getDaoFor(SensorDataRecord.class);
         this.accelerometerX = new AtomicDouble();

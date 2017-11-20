@@ -10,6 +10,7 @@ public class SensorRate {
     private int SENSOR_RATE_30Hz = 33333;
     private int SENSOR_RATE_20Hz = 50000;
     private int SENSOR_RATE_10Hz = 100000;
+    private int SENSOR_RATE_1Hz = 1000000;
     private int SENSOR_RATE_FAST = 12500; //80Hz
 
     public int get_SENSOR_RATE_NORMAL(){
@@ -34,5 +35,9 @@ public class SensorRate {
 
     public int get_SENSOR_RATE_FAST(){
         return this.SENSOR_RATE_FAST;
+    }
+
+    public int get_SENSOR_RATE_1Hz(){
+        return this.SENSOR_RATE_1Hz;
     }
 }
