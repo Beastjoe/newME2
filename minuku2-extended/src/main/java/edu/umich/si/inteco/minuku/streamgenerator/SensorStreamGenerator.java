@@ -50,6 +50,7 @@ import java.util.concurrent.Future;
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.MyActivity;
 import edu.umich.si.inteco.minuku.config.MyApplication;
+import edu.umich.si.inteco.minuku.config.SensorRate;
 import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.logger.Log;
@@ -106,7 +107,7 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
         //sensorManager = (SensorManager) mInstance.getSystemService(Context.SENSOR_SERVICE);
         sensorManager = (SensorManager) mApplicationContext.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, mAccelerometer, new SensorRate().get_SENSOR_RATE_10Hz());
         this.mStream = new SensorStream(Constants.SENSOR_QUEUE_SIZE);
         this.mDAO = MinukuDAOManager.getInstance().getDaoFor(SensorDataRecord.class);
         this.accelerometerX = new AtomicDouble();
