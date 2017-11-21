@@ -246,5 +246,5 @@ public class Constants {
     public static final String DIABETES_LOG_NOTIFICATION_SOURCE = "DIABETES_LOG";
 
     public static long LOCATION_SAMPLE_FREQUENCY = 15; //15 is 1 minute
-
+    public static boolean INTERMITTENT_SAMPLING = false; // Control of intermittent sampling
 }

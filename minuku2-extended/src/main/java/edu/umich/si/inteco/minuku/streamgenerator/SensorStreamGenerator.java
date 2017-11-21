@@ -44,6 +44,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -87,6 +89,17 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
     private AtomicDouble accelerometerZ;
 
     private DAO<SensorDataRecord> mDAO;
+
+    private boolean intermittent_period = false;
+    private Timer timer = new Timer();
+    private TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            if (intermittent_period) intermittent_period = false;
+            else intermittent_period = true;
+        }
+    };
+
 
     /*public void onCreate() {
                 // TODO Auto-generated method stub
@@ -161,6 +174,7 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
         } catch (StreamAlreadyExistsException streamAlreadyExistsException) {
             Log.e(TAG, "Another stream which provides SensorDataRecord is already registered.");
         }
+        timer.schedule(task, 5*60*1000);
     }
 
     @Override
@@ -224,7 +238,9 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
     			this.accelerometerY.set(event.values[1]);
     			this.accelerometerZ.set(event.values[2]);
 		    //Accelerometerx.setText(Float.toString(accx));
-		    updateStream();}
+		        if ((intermittent_period && Constants.INTERMITTENT_SAMPLING )|| !Constants.INTERMITTENT_SAMPLING)
+		            updateStream();
+		   }
     }
 
     public void resetListener(){
