@@ -98,7 +98,6 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
             if (intermittent_period) intermittent_period = false;
             else intermittent_period = true;
             Log.d("zsc",""+intermittent_period);
-            timer.schedule(task, 5000);
         }
     };
 
