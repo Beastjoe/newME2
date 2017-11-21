@@ -22,23 +22,14 @@
 
 package edu.umich.si.inteco.minuku.streamgenerator;
 
-import android.app.Activity;
 import android.content.Context;
-//import android.location.Location;
-import android.os.AsyncTask;
-
-/*import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;*/
-import com.google.common.util.concurrent.AtomicDouble;
-
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
+
+import com.google.common.util.concurrent.AtomicDouble;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -51,7 +42,6 @@ import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.MyActivity;
-import edu.umich.si.inteco.minuku.config.MyApplication;
 import edu.umich.si.inteco.minuku.config.SensorRate;
 import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
@@ -68,14 +58,22 @@ import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 
+//import android.location.Location;
+/*import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;*/
+
 /**
  * Created by neerajkumar on 7/18/16.
  */
-public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataRecord>  implements
+public class OptimizedSensorStreamGenerator extends AndroidStreamGenerator<SensorDataRecord>  implements
         SensorEventListener {
     private SensorStream mStream;
     private String TAG = "SensorStreamGenerator";
-    
+
     private  SensorManager sensorManager;
     private  Sensor mAccelerometer;
     //private MyApplication mInstance;
@@ -114,7 +112,7 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
 
 
 
-    public SensorStreamGenerator(Context applicationContext) {
+    public OptimizedSensorStreamGenerator(Context applicationContext) {
             super(applicationContext);
         //sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
@@ -191,7 +189,31 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
                 (float)accelerometerY.get(),
                 (float)accelerometerZ.get());
 
-        mStream.add(sensorDataRecord);
+        //Data optimized option: only the biggest change is recorded
+        if (Constants.DATA_OPTIMIZE){
+            //get the axis that changes most
+            int accelerateAxis;
+            double accelerometer;
+            if (accelerometerX.get()>accelerometerY.get() && accelerometerX.get()>accelerometerZ.get()){
+                accelerateAxis = 0;
+                accelerometer = accelerometerX.get();
+            }
+            else if (accelerometerY.get()>accelerometerX.get() && accelerometerY.get()>accelerometerZ.get()){
+                accelerateAxis = 1;
+                accelerometer = accelerometerY.get();
+            }
+            else {
+                accelerateAxis = 2;
+                accelerometer = accelerometerZ.get();
+            }
+            SensorOptimizedDataRecord sensorOptimizedDataRecord = new SensorOptimizedDataRecord(
+                    (float) accelerometer,
+                    (int) accelerateAxis
+            );
+            mStream.add(sensorOptimizedDataRecord);
+        }
+
+        else mStream.add(sensorDataRecord);
         Log.d(TAG, "Sensor to be sent to event bus" + sensorDataRecord);
 
         // also post an event.

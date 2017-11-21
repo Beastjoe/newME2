@@ -43,6 +43,7 @@ import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.model.SensorDataRecord;
+import edu.umich.si.inteco.minuku.model.SensorOptimizedDataRecord;
 import edu.umich.si.inteco.minukucore.dao.DAO;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.user.User;
@@ -75,6 +76,16 @@ public class SensorDataRecordDAO implements DAO<SensorDataRecord> {
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
         sensorListRef.push().setValue((SensorDataRecord) entity);
     }
+
+    public void add(SensorOptimizedDataRecord entity) throws DAOException {
+        Log.d(TAG, "Adding sensor data record.");
+        String firebaseUrlForSensor = Constants.getInstance().getFirebaseUrlForSensor();
+        Firebase sensorListRef = new Firebase(firebaseUrlForSensor)
+                .child(myUserEmail)
+                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
+        sensorListRef.push().setValue((SensorOptimizedDataRecord) entity);
+    }
+
 
     @Override
     public void delete(SensorDataRecord entity) throws DAOException {
