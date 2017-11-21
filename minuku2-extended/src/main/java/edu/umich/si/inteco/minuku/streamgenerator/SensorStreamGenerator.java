@@ -225,6 +225,10 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
     			this.accelerometerZ.set(event.values[2]);
 		    //Accelerometerx.setText(Float.toString(accx));
 		    updateStream();}
-		    
-}
+    }
+
+    public void resetListener(){
+        sensorManager.unregisterListener(this);
+        sensorManager.registerListener(this, mAccelerometer, SensorRate.SENSOR_RATE_CUSTOM);
+    }
 }
