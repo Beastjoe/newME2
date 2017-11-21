@@ -97,6 +97,8 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
         public void run() {
             if (intermittent_period) intermittent_period = false;
             else intermittent_period = true;
+            Log.d("zsc",""+intermittent_period);
+            timer.schedule(task, 5000);
         }
     };
 
@@ -174,7 +176,7 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
         } catch (StreamAlreadyExistsException streamAlreadyExistsException) {
             Log.e(TAG, "Another stream which provides SensorDataRecord is already registered.");
         }
-        timer.schedule(task, 5*60*1000);
+        timer.schedule(task, 5000);
     }
 
     @Override
