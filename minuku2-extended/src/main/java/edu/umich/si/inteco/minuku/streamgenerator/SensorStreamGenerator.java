@@ -175,7 +175,7 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
         } catch (StreamAlreadyExistsException streamAlreadyExistsException) {
             Log.e(TAG, "Another stream which provides SensorDataRecord is already registered.");
         }
-        timer.schedule(task, 1000,5000);
+        timer.schedule(task, 1000,1000*5*60);//period of 5 minutes
     }
 
     @Override
