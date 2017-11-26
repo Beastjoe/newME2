@@ -238,8 +238,8 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
 		   {
                 //Filter the gravity from z-axis
                 final double alpha = 0.8;
-                double[] gravity = null;
-                double[] linear_acceleration = null;
+                double[] gravity = new double[3];
+                double[] linear_acceleration = new double[3];
                 gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
                 gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
                 gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
