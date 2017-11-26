@@ -71,21 +71,35 @@ public class SensorDataRecordDAO implements DAO<SensorDataRecord> {
     public void add(SensorDataRecord entity) throws DAOException {
         Log.d(TAG, "Adding sensor data record.");
         String firebaseUrlForSensor = Constants.getInstance().getFirebaseUrlForSensor();
-        Firebase sensorListRef = new Firebase(firebaseUrlForSensor)
-                .child(myUserEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-        sensorListRef.push().setValue((SensorDataRecord) entity);
-    }
 
-    public void add(SensorOptimizedDataRecord entity) throws DAOException {
-        Log.d(TAG, "Adding sensor data record.");
-        String firebaseUrlForSensor = Constants.getInstance().getFirebaseUrlForSensor();
-        Firebase sensorListRef = new Firebase(firebaseUrlForSensor)
-                .child(myUserEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-        sensorListRef.push().setValue((SensorOptimizedDataRecord) entity);
+        if (Constants.DATA_OPTIMZED) {
+            int accelerateAxis;
+            double accelerometer;
+            if (entity.getAccelerometerX() > entity.getAccelerometerY() && entity.getAccelerometerX() > entity.getAccelerometerZ()) {
+                accelerateAxis = 0;
+                accelerometer = entity.getAccelerometerX();
+            } else if (entity.getAccelerometerY() > entity.getAccelerometerX() && entity.getAccelerometerY() > entity.getAccelerometerZ()) {
+                accelerateAxis = 1;
+                accelerometer = entity.getAccelerometerY();
+            } else {
+                accelerateAxis = 2;
+                accelerometer = entity.getAccelerometerZ();
+            }
+            SensorOptimizedDataRecord sensorOptimizedDataRecord = new SensorOptimizedDataRecord(
+                    (float) accelerometer,
+                    (int) accelerateAxis
+            );
+            Firebase sensorListRef = new Firebase(firebaseUrlForSensor)
+                    .child(myUserEmail)
+                    .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
+            sensorListRef.push().setValue((SensorOptimizedDataRecord) sensorOptimizedDataRecord);
+        } else {
+            Firebase sensorListRef = new Firebase(firebaseUrlForSensor)
+                    .child(myUserEmail)
+                    .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
+            sensorListRef.push().setValue((SensorDataRecord) entity);
+        }
     }
-
 
     @Override
     public void delete(SensorDataRecord entity) throws DAOException {

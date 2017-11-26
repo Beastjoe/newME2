@@ -37,8 +37,22 @@ public class SensorOptimizedDataRecord implements DataRecord {
     public long creationTime;
 
     public SensorOptimizedDataRecord() {
-
     }
+    public SensorOptimizedDataRecord(SensorDataRecord entity){
+        if (entity.getAccelerometerX() > entity.getAccelerometerY() && entity.getAccelerometerX() > entity.getAccelerometerZ()) {
+            this.accelerateAxis = 0;
+            this.accelerometer = entity.getAccelerometerX();
+        } else if (entity.getAccelerometerY() > entity.getAccelerometerX() && entity.getAccelerometerY() > entity.getAccelerometerZ()) {
+            this.accelerateAxis = 1;
+            this.accelerometer = entity.getAccelerometerY();
+        } else {
+            this.accelerateAxis = 2;
+            this.accelerometer = entity.getAccelerometerZ();
+        }
+        this.creationTime = entity.creationTime;
+    }
+
+
 
     public SensorOptimizedDataRecord(float accelerometer
     , int accelerateAxis

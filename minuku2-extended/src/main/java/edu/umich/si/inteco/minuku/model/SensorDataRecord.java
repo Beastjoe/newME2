@@ -37,7 +37,23 @@ public class SensorDataRecord implements DataRecord {
     public long creationTime;
 
     public SensorDataRecord() {
+    }
 
+    public SensorDataRecord(SensorOptimizedDataRecord sensorOptimizedDataRecord){
+        if (sensorOptimizedDataRecord.accelerateAxis == 0) {
+            this.accelerometerX=sensorOptimizedDataRecord.accelerometer;
+            this.accelerometerY=0;
+            this.accelerometerZ=0;
+        } else if (sensorOptimizedDataRecord.accelerateAxis == 1) {
+            this.accelerometerY=sensorOptimizedDataRecord.accelerometer;
+            this.accelerometerX=0;
+            this.accelerometerZ=0;
+        } else {
+            this.accelerometerZ=sensorOptimizedDataRecord.accelerometer;
+            this.accelerometerX=0;
+            this.accelerometerY=0;
+        }
+        this.creationTime=sensorOptimizedDataRecord.creationTime;
     }
 
     public SensorDataRecord(float accelerometerX

@@ -22,23 +22,14 @@
 
 package edu.umich.si.inteco.minuku.streamgenerator;
 
-import android.app.Activity;
 import android.content.Context;
-//import android.location.Location;
-import android.os.AsyncTask;
-
-/*import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;*/
-import com.google.common.util.concurrent.AtomicDouble;
-
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
+
+import com.google.common.util.concurrent.AtomicDouble;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -51,7 +42,6 @@ import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.MyActivity;
-import edu.umich.si.inteco.minuku.config.MyApplication;
 import edu.umich.si.inteco.minuku.config.SensorRate;
 import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
@@ -60,6 +50,7 @@ import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.SensorDataRecord;
 import edu.umich.si.inteco.minuku.model.SensorOptimizedDataRecord;
+import edu.umich.si.inteco.minuku.stream.OptimizedSensorStream;
 import edu.umich.si.inteco.minuku.stream.SensorStream;
 import edu.umich.si.inteco.minukucore.dao.DAO;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
@@ -68,6 +59,14 @@ import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 
+//import android.location.Location;
+/*import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;*/
+
 /**
  * Created by neerajkumar on 7/18/16.
  */
@@ -75,7 +74,7 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
         SensorEventListener {
     private SensorStream mStream;
     private String TAG = "SensorStreamGenerator";
-    
+
     private  SensorManager sensorManager;
     private  Sensor mAccelerometer;
     //private MyApplication mInstance;
@@ -192,6 +191,7 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
                 (float)accelerometerZ.get());
 
         mStream.add(sensorDataRecord);
+
         Log.d(TAG, "Sensor to be sent to event bus" + sensorDataRecord);
 
         // also post an event.
@@ -243,7 +243,6 @@ public class SensorStreamGenerator extends AndroidStreamGenerator<SensorDataReco
                 gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
                 gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
                 gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
-                linear_acceleration[0] = event.values[0] - gravity[0];
                 linear_acceleration[0] = event.values[0] - gravity[0];
                 linear_acceleration[1] = event.values[1] - gravity[1];
                 linear_acceleration[2] = event.values[2] - gravity[2];
